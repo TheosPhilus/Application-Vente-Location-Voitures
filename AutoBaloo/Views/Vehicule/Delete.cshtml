@@ -1,0 +1,84 @@
+﻿@model Vehicule
+
+@{ ViewData["Title"] = "Supprimer Une  voiture ";
+                // Récupère le chemin complet de la photo des voitures existantes pour l'affichage
+                var photoPath = "~/images/" + (Model.ImageURL ?? "noimage.jpg"); }
+
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h1>Supprimer la confirmation pour @Model.MarqueVehicule</h1>
+        </p>
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div class="form-group text-center">
+                    <img class="border-info rounded-circle" style="max-width: 150px" id="LogoPreview" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="MarqueVehicule" class="control-label"></label>
+                    <input asp-for="MarqueVehicule" class="form-control" readonly />
+                    <span asp-validation-for="MarqueVehicule" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DescriptionVehicule" class="control-label"></label>
+                    <input asp-for="DescriptionVehicule" class="form-control" readonly />
+                    <span asp-validation-for="DescriptionVehicule" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="KM" class="control-label"></label>
+                    <input asp-for="KM" class="form-control" readonly />
+                    <span asp-validation-for="KM" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CouleurVehicule" class="control-label"></label>
+                    <input asp-for="CouleurVehicule" class="form-control" readonly />
+                    <span asp-validation-for="CouleurVehicule" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrixVehicule" class="control-label"></label>
+                    <input asp-for="PrixVehicule" class="form-control" readonly />
+                    <span asp-validation-for="PrixVehicule" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Prix_par_jour" class="control-label"></label>
+                    <input asp-for="Prix_par_jour" class="form-control" readonly />
+                    <span asp-validation-for="Prix_par_jour" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="OptionVehicule" class="control-label"></label>
+                    <input asp-for="OptionVehicule" class="form-control" readonly />
+                    <span asp-validation-for="OptionVehicule" class="text-danger"></span>
+                </div>
+
+                @*Afficher la photo des voitures existantes*@
+                <div class="form-group row col-sm-2 offset-2">
+                    <img class="imageThumbnail" src="@photoPath" asp-append-version="true" />
+                </div>
+
+
+                <div class="form-group">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="confirmer" class="btn btn-danger float-right" />
+                    </form>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                </div>
+            </div>
+
+            @section Scripts {
+                <script>
+                    $(document).ready(function () {
+                        $('.custom-file-input').on("change", function () {
+                            var fileName = $(this).val().split("\\").pop();
+                            $(this).next('.custom-file-label').html(fileName);
+                        });
+                    });
+                </script>
+            }
+        </div>
+    </div>
+</div>
+
+

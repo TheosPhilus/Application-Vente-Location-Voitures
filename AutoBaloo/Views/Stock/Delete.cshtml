@@ -1,0 +1,50 @@
+﻿@model Stock
+
+@{ ViewData["Title"] = "Supprimer stock"; }
+
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h1> Supprimer la confirmation pour @Model.IdVehicule    </h1>
+        </p>
+     
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="IdVehicule" class="control-label"></label>
+                    <select asp-for="IdVehicule" class="form-control" asp-items="ViewBag.Vehicules"></select>
+                    <span asp-validation-for="IdVehicule" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label asp-for="DateStock" class="control-label"></label>
+                    <input asp-for="DateStock" type="date" class="form-control" />
+                    <span asp-validation-for="DateStock" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="QteStock" class="control-label"></label>
+                    <input asp-for="QteStock" type="number" class="form-control" />
+                    <span asp-validation-for="QteStock" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Confirm" class="btn btn-danger float-right" />
+                </form>
+                <a class="btn btn-outline-secondary" asp-action="Index">Retourner</a>
+            </div>
+        </div>
+
+             
+            </div>
+        </div>
+   

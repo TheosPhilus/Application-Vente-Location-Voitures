@@ -1,0 +1,84 @@
+﻿@model Vehicule
+@using AutoBaloo.Data.Enums;
+@{
+    ViewBag.Title = "Détails des véhicule";
+    var photoPath = "~/images/" + (Model.ImageURL ?? "1.jpg");
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="card mb-12">
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="card-header text-white bg-info">
+                        <p class="card-text">
+                            <h5 class="card-title">
+                                @Model.MarqueVehicule
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4  ">
+                    <img src="@photoPath" asp-append-version="true" width="100%" height="50%" alt="@Model.MarqueVehicule">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p class="card-text"><b>Model Véhicule: </b>@Model.DescriptionVehicule</p>
+                        <p class="card-text"><b>Kilométrage: </b> @Model.KM</p>
+                        <p class="card-text"><b>Couleur: </b>@Model.CouleurVehicule</p>
+                        <p class="card-text"><b>Type carburant: </b>@Model.TypeCarbu</p>
+                        <p class="card-text"><b>Date construction: </b>@Model.DateConstruct</p>
+                        
+
+                        <p class="card-text">
+                            @if (Model.typeAchat == TypeAchat.louer)
+                            {
+                                <b>Prix par jours </b>@Model.Prix_par_jour.ToString("c")
+                            }
+                            else
+                            {
+                                <b>Prix du Voiture </b>@Model.PrixVehicule.ToString("c")
+                            }
+                        </p>
+                        
+                        <p class="card-text">
+                            @if (Model.OptionVehicule != 0)
+                             {
+                                <span class="badge bg-success text-white">Remise @Model.OptionVehicule %</span>
+                             }
+                        </p>
+                        
+
+
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-footer">
+                        <p class="card-text">
+                            <a class="btn btn-outline-primary float-right" asp-action="Index">
+                                Retourner
+                            </a>
+                            @if (Model.typeAchat == TypeAchat.louer)
+                            {
+
+                                <a class="btn btn-success text-white" asp-controller="Reservation" asp-action="Create" asp-route-id="Model.Id">
+                                    <i class="bi bi-calendar-check"></i> Réserver
+                                </a>
+                            }
+                            else if (Model.typeAchat == TypeAchat.Vendre)
+                            {
+                                <a class="btn btn-success text-white"
+                                   asp-controller="Orders"
+                                   asp-action="AddItemToShoppingCart"
+                                   asp-route-id="Model.Id">
+                                    <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                </a>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,125 @@
+﻿@using AutoBaloo.Data.ViewModels;
+@using AutoBaloo.Data.Enums;
+@model ShoppingCartVM
+
+@{ ViewData["Title"] = "Récapitulatif de votre panier"; }
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="text-center">
+            <h2>Récapitulatif de votre panier</h2>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+
+                    <th>Montant sélectionné</th>
+                    <th>Vehicule</th>
+                    <th>Prix</th>
+                    <th>Prix par jour</th>
+                    <th>Remise</th>
+                    <th>Total</th>
+                    <th>
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                {
+
+
+
+    <tr>
+        <td class="align-middle">@item.montant</td>
+        <td class="align-middle">@item.Vehicule.MarqueVehicule</td>
+        <td class="align-middle">@item.Vehicule.PrixVehicule.ToString("c")</td>
+
+
+        <td class="align-middle">@(((item.montant * item.Vehicule.PrixVehicule / 100) * item.Vehicule.OptionVehicule).ToString("c"))</td>
+        <td class="align-middle">@((item.montant * item.Vehicule.PrixVehicule).ToString("c"))</td>
+
+        <td class="align-middle">
+            <a class="text-danger" asp-controller="Orders" asp-action="RemoveItemFromShoppingCart"
+               asp-route-id="@item.Vehicule.Id">
+                <i class="bi bi-cart-dash"></i>
+            </a>
+
+        </td>
+    </tr>            }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td><b>Total:</b></td>
+                    <td>
+                        @Model.ShoppingCartTotal.ToString("c")
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="text-right">
+            <div class="btn-group">
+
+                <div id="paypal-btn"></div>
+                <span style="padding:5px"></span>
+                <a class="btn btn-outline-success" asp-controller="Vehicule" asp-action="Index">
+                    Continuer votre Achat
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+    <script>
+
+        let _total = @Html.Raw(Model.ShoppingCartTotal);
+
+        paypal.Button.render({
+            //Configure environment
+            env: 'sandbox',
+            client: {
+                sandbox: 'AcKRtgL4i68EZ2ZYuYUx3ilihAg2YhL5dtF_m19A8MjBWVOn6ewNS4M_uV8gA3xi98zTcUq38gUHbVFx'
+            },
+
+            //Customize button
+            locale: 'en_US',
+            style: {
+                size: 'small',
+                color: 'gold',
+                shape: 'pill'
+            },
+            commit: true,
+
+            //Set up a payment
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: _total,
+                            currency: 'EUR'
+                        }
+                    }]
+                });
+            },
+
+            //Execute the payment
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute().then(function () {
+                    var url = '@Url.Action("CompleteOrder", "Orders", new { })';
+                    window.location.href = url;
+                });
+            }
+
+        }, '#paypal-btn')
+    </script>
+}

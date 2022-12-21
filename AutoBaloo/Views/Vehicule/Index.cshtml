@@ -1,0 +1,253 @@
+﻿@model IEnumerable<Vehicule>
+@using AutoBaloo.Data.Enums;
+@{
+    ViewData["Title"] = "Liste des vehicules ";
+}
+
+
+<form class="form-inline" asp-controller="Vehicule" asp-action="Filter" style="justify-content:flex-end;">
+    <input name="searchString" type="text" class="form-control" placeholder="Chercher une voiture ..." aria-label="Recipient's username" aria-describedby="button-addon2">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+</form>
+
+
+<div id="intro"
+     class="bg-image shadow-1-strong"
+     style=" background-image: url(data:image/jpeg;base64,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); height: 300px; ">
+    <div class="mask text-white"
+         style="background-color: rgba(0, 0, 0, 0.6); margin-top: 58px">
+        <div class="container d-flex align-items-center justify-content-center text-center h-100">
+            <div class="text-white">
+                <h1 class="mb-3">Promotions</h1>
+                <h4 class="mb-4">Promotions jusqu'à 70% !</h4>
+                <a class="btn btn-outline-light btn-lg mb-3" asp-controller="Vehicule" asp-action="Promo"
+                   
+                   role="button">
+                    Voir l'offre promotionnelle
+                    <i class="fas fa-gem ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div class="text-white" style="justify-content: flex-start;">
+
+        <a asp-controller="Vehicule" asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Ajouter Voiture
+        </a>
+    </div>
+
+}
+
+
+<span style="padding:20px"></span>
+
+<div class="row">
+    <div class="col-md-10 ">
+        <h4>Les dernières voitures arrivées et les promotions du mois </h4>
+        <hr />
+    </div>
+
+    @foreach (var item in Model.Reverse().Take(10))
+    {
+        @if (item.OptionVehicule != 0 || Convert.ToDateTime(item.Datearrivée) <= DateTime.Now)
+        {
+
+            var photoPath = "~/images/" + (item.ImageURL ?? "1.jpg.jpg");
+
+            <div class=" col-md-4 col-xs-6 border-primary mb-10 ">
+                <div class="card mb-3" style=" max-width: 498px; ">
+                    <div class="row g-0">
+                        <div class="col-md-12">
+                            <div class="card-header text-white bg-info" style="height:75px">
+                                <p class="card-text">
+                                    <h6 class="card-title ">
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                        {
+                                            <a class="text-white float-right" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-x-square"></i></a>
+                                            <a class="text-white float-right" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                                        }
+                                        @item.MarqueVehicule <br />
+
+                                        @if (@item.typeAchat == TypeAchat.louer)
+                                        {
+
+                                            <h7> @item.Prix_par_jour.ToString("c") /J</h7>
+
+                                        }
+                                        else
+                                        {
+                                            @item.PrixVehicule.ToString("c")
+                                        }
+
+                                    </h6>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6  ">
+                            <div class="bg-image hover-zoom ripple" data-ripple-color="light">
+                                <img src="@photoPath" asp-append-version="true"
+                                     class="w-100" />
+
+                                <div class="mask">
+                                    <div class="d-flex justify-content-start align-items-end h-100">
+                                        @if (@item.OptionVehicule != 0)
+                                        {
+                                            <h5><span class="badge bg-danger ml-2"> @item.OptionVehicule %</span></h5>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="hover-overlay">
+                                    <div class="mask"
+                                         style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="card-body">
+                                <p class="card-text " style="height:110px;">@item.DescriptionVehicule</p>
+                                <p class="card-text"><b style="font-size:small">kilometrage: </b>@item.KM</p>
+                                <p class="card-text "><b style="font-size:small">Date construction: </b>@item.DateConstruct</p>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card-footer ">
+                                <div class="card-text">
+
+                                    <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="bi bi-eye-fill"></i>  Détails
+                                    </a>
+                                    @if (@item.typeAchat == TypeAchat.louer)
+                                    {
+
+                                        <a class="btn btn-success text-white" asp-controller="Reservation" asp-action="Create" asp-route-id="@item.Id">
+                                            <i class="bi bi-calendar-check"></i> Réserver
+                                        </a>
+                                    }
+                                    else if (@item.typeAchat == TypeAchat.Vendre)
+                                    {
+                                        <a class="btn btn-success text-white"
+                                           asp-controller="Orders"
+                                           asp-action="AddItemToShoppingCart"
+                                           asp-route-id="@item.Id">
+                                            <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+
+
+    <div class="col-md-10 ">
+        <h4>Toutes les voitures </h4>
+        <hr />
+    </div>
+    @foreach (var item in Model.Reverse().Take(10))
+    {
+       
+
+            var photoPath = "~/images/" + (item.ImageURL ?? "1.jpg.jpg");
+
+            <div class=" col-md-4 col-xs-6 border-primary mb-10 ">
+                <div class="card mb-3" style=" max-width: 498px; ">
+                    <div class="row g-0">
+                        <div class="col-md-12">
+                            <div class="card-header text-white bg-info" style="height:75px">
+                                <p class="card-text">
+                                    <h6 class="card-title ">
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                        {
+                                            <a class="text-white float-right" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-x-square"></i></a>
+                                            <a class="text-white float-right" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                                        }
+                                        @item.MarqueVehicule <br />
+
+                                        @if (@item.typeAchat == TypeAchat.louer)
+                                        {
+
+                                            <h7> @item.Prix_par_jour.ToString("c") /J</h7>
+
+                                        }
+                                        else
+                                        {
+                                            @item.PrixVehicule.ToString("c")
+                                        }
+
+                                    </h6>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6  ">
+                            <div class="bg-image hover-zoom ripple" data-ripple-color="light">
+                                <img src="@photoPath" asp-append-version="true"
+                                     class="w-100" />
+
+                                <div class="mask">
+                                    <div class="d-flex justify-content-start align-items-end h-100">
+                                        @if (@item.OptionVehicule != 0)
+                                        {
+                                            <h5><span class="badge bg-danger ml-2"> @item.OptionVehicule %</span></h5>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="hover-overlay">
+                                    <div class="mask"
+                                         style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="card-body">
+                                <p class="card-text " style="height:110px;">@item.DescriptionVehicule</p>
+                                <p class="card-text"><b style="font-size:small">kilometrage: </b>@item.KM</p>
+                                <p class="card-text "><b style="font-size:small">Date construction: </b>@item.DateConstruct</p>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card-footer ">
+                                <div class="card-text">
+
+                                    <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="bi bi-eye-fill"></i>  Détails
+                                    </a>
+                                    @if (@item.typeAchat == TypeAchat.louer)
+                                    {
+
+                                        <a class="btn btn-success text-white" asp-controller="Reservation" asp-action="Create" asp-route-id="@item.Id">
+                                            <i class="bi bi-calendar-check"></i> Réserver
+                                        </a>
+                                    }
+                                    else if (@item.typeAchat == TypeAchat.Vendre)
+                                    {
+                                        <a class="btn btn-success text-white"
+                                           asp-controller="Orders"
+                                           asp-action="AddItemToShoppingCart"
+                                           asp-route-id="@item.Id">
+                                            <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    
+</div>

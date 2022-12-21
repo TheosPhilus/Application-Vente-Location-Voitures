@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AutoBaloo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" >
+            <div class="container-fluid"  >
+
+                <a class="navbar-brand" asp-controller="Vehicule" asp-action="Index"  >
+                    <img src="/images/logo_1.png"  style="width :30% ;height:1%; display: block;">
+                </a>
+
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between" @*style="padding-left: 0;"*@>
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-car-front"></i> Véhicule
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="Vehicule" asp-action="Louer"><i class="bi bi-car-front"></i>A Louer</a>
+                                <a class="dropdown-item" asp-controller="Vehicule" asp-action="Vendre"><i class="bi bi-box-fill"></i>A Vendre</a>
+                            </div>
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-gear"></i> Admin
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Vehicule" asp-action="Index"><i class="bi bi-car-front"></i> Véhicule</a>
+                                    <a class="dropdown-item" asp-controller="Stock" asp-action="Index"><i class="bi bi-box-fill"></i> Stock</a>
+
+                                    <a class="dropdown-item" asp-controller="Reservation" asp-action="Index"><i class="bi bi-calendar-check"></i> Réservation</a>
+                                    <a class="dropdown-item" asp-controller="Statut" asp-action="Index"><i class="bi bi-gear"></i> Préparation Auto </a>
+                                </div>
+
+                            </li>
+                        }
+                    </ul>
+
+
+
+                    <ul class="navbar-nav">
+                        @await Component.InvokeAsync("ShoppingCartSummary")
+                    </ul>
+
+                    @*User profile section *@
+
+                    <partial name="_LoginPartial" />
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - AutoBaloo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Confidentialité</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

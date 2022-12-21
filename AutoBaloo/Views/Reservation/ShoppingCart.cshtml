@@ -1,0 +1,112 @@
+﻿@using AutoBaloo.Data.ViewModels;
+@model ShoppingCartVM
+
+@{ ViewData["Title"] = "Récapitulatif de votre panier"; }
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="text-center">
+            <h2>Récapitulatif de votre panier</h2>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Montant sélectionné</th>
+                    <th>Vehicule</th>
+                    <th>Date Début</th>
+                    <th>Date fin </th>
+                    <th>Durée</th>
+                    <th>Prix par jours </th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                {
+    <tr>
+        <td class="align-middle">@item.montant</td>
+        <td class="align-middle">@item.Reservation.Vehicule.MarqueVehicule</td>
+        <td class="align-middle">@item.Reservation.DateDebut</td>
+        <td class="align-middle">@item.Reservation.DateFin</td>
+        <td class="align-middle">@item.Reservation.Duree</td>
+        <td class="align-middle">@item.Reservation.Vehicule.Prix_par_jour</td>
+
+
+    </tr>}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td><b>Total:</b></td>
+                    <td>
+                        @Model.ShoppingCartTotal.ToString("c")
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="text-right">
+            <div class="btn-group">
+
+                <div id="paypal-btn"></div>
+                <span style="padding:5px"></span>
+                <a class="btn btn-outline-success" asp-controller="Vehicule" asp-action="Index">
+                    Continuer votre Achat
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+    @section Scripts{
+
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+        <script>
+
+        let _total = @Html.Raw(Model.ShoppingCartTotal);
+
+        paypal.Button.render({
+            //Configure environment
+            env: 'sandbox',
+            client: {
+                sandbox: 'AcKRtgL4i68EZ2ZYuYUx3ilihAg2YhL5dtF_m19A8MjBWVOn6ewNS4M_uV8gA3xi98zTcUq38gUHbVFx'
+            },
+
+            //Customize button
+            locale: 'en_US',
+            style: {
+                size: 'small',
+                color: 'gold',
+                shape: 'pill'
+            },
+            commit: true,
+
+            //Set up a payment
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: _total,
+                            currency: 'USD'
+                        }
+                    }]
+                });
+            },
+
+            //Execute the payment
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute().then(function () {
+                    var url = '@Url.Action("CompleteOrder", "Orders", new { })';
+                    window.location.href = url;
+                });
+            }
+
+        }, '#paypal-btn')
+        </script>
+    }

@@ -1,0 +1,55 @@
+﻿@model List<Reservation>
+
+@{ ViewData["Title"] = "Liste de toutes vos commandes"; }
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h4>Liste de toutes vos commandes</h4>
+        </p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date début </th>
+                    <th>Date fin </th>
+                    <th>Date duree </th>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                      <th>User</th>
+                     } 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model)
+                {
+                 <tr>
+                    <td class="align-middle">@reservation.Id</td>
+                 <td class="align-middle">
+                 <ul style="list-style-type:none">
+               
+                    <li>
+                        <div class="alert alert-info" role="alert">
+                            <span class="badge bg-success">@reservation.DateDebut</span>
+                            <span class="badge bg-success">@reservation.DateFin</span>
+                            <span class="badge bg-success">@reservation.Duree</span>
+                            <span class="badge bg-success">@reservation.Vehicule.MarqueVehicule</span>
+
+                        </div>
+                    </li>
+                 </ul>
+                 </td>
+                    @*<td class="align-middle">
+                        @order.OrderItems.Select(m => m.Reservation.Vehicule.PrixVehicule * m.montant).Sum().ToString("c")
+                    </td>*@
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                       <td class="align-middle"> @reservation.User.FullName </td>}
+                </tr>
+                 }
+            </tbody>
+        </table>
+
+    </div>
+</div>
